@@ -24,9 +24,9 @@ export class AdminController
 
   //add new body
   @Post('/add')
-  
-  create(@Body() body) {
-    return this.adminService.create(body);
+  @UsePipes(new ValidationPipe())
+  create(@Body() mydto:AdminForm) {
+    return this.adminService.create(mydto);
   }
 
   //update id,name
