@@ -10,6 +10,8 @@ export class AppController {
     return this.appService.getHello();
   }
 }
+<<<<<<< HEAD
+=======
 
 
 // <<<<<<< HEAD
@@ -36,3 +38,4 @@ export class AppController {
 
 
 
+>>>>>>> 41471ffaa0b2f3eca4f26de71ed270e0f0d9294f
