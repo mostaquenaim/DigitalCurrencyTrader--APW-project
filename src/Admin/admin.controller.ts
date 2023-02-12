@@ -24,6 +24,7 @@ export class AdminController
 
   //add new body
   @Post('/add')
+  
   create(@Body() body) {
     return this.adminService.create(body);
   }
