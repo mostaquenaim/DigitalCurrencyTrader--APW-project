@@ -19,6 +19,7 @@ import { UserService } from "./userservice.service";
         getUserByName(@Query() qry:any): any {
           return this.userService.getUserByName(qry);
         }  
+        
 
         @Post("/insert")
         @UsePipes(new ValidationPipe())
@@ -71,6 +72,7 @@ import { UserService } from "./userservice.service";
             }
             // post put patch
             // paeseint parsedouble
+            
         
 
 
