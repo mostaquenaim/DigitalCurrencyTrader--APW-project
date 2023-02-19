@@ -11,9 +11,9 @@ import { UserModule } from './user/usermodule.module';
     type: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'root',
+    username: 'postgres',
     password: 'root',
-    database: 'crpyto',
+    database: 'MyAdminDB',
     autoLoadEntities: true,
     synchronize: true,
     }
