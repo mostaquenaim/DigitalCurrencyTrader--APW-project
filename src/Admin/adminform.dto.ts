@@ -1,8 +1,9 @@
-import { IsInt, IsNotEmpty, Length, Matches } from "class-validator";
+import { IsDate, IsInt, IsNotEmpty, Length, Matches } from "class-validator";
 
 export class AdminForm {   
     @IsNotEmpty({message: "Please enter your id"}) 
     @IsInt({message: "id must be a number"})
+    //@Length(1,)
    // @Matches(/^[0-9]+$/,{message: "id must be a number"})
     id: number;
 
@@ -33,8 +34,9 @@ export class AdminForm {
 
     mbl_no: string;
 
-
-
-
-
+    @IsNotEmpty()
+    @IsDate({
+      message:'date is not correct',
+    })
+    birthDate:Date;
 }
