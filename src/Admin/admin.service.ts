@@ -11,6 +11,15 @@ export class AppService {
     return "the customer id is "+id;
   }
 
+  getUserByID(id):any{
+    return "the customer id is "+id;
+  }
+
+  FloatTest(id):any{
+    return "the customer id is "+id;
+  }
+
+
   findOne(id){
     return "the id is "+id;
   }

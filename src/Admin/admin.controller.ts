@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, Request, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseFloatPipe, ParseIntPipe, Post, Put, Query, Req, Request, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AdminForm } from "./adminform.dto";
 import { AdminService } from "./adminservice.service";
 
@@ -28,6 +28,17 @@ export class AdminController
   create(@Body() mydto:AdminForm) {
     return this.adminService.create(mydto);
   }
+  //transformation-1 parseInt
+  @Get("/search/:id")
+        getUserByID(@Param("id",ParseIntPipe)id:number):any{
+            return this.adminService.getUserByID(id);
+        }
+
+    //transformation-2 parseFloat
+  @Get("/floattest/:id")
+  FloatTest(@Param("id",ParseFloatPipe)id){
+      return this.adminService.FloatTest(id);
+  }      
 
   //update id,name
   @Put('update/:id')

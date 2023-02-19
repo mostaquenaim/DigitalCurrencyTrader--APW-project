@@ -21,9 +21,17 @@ export class AdminService {
         
         return "the id is "+qry.id +" and name is "+qry.name;
     }
+
+    getUserByID(id):any{
+      return "the customer id is "+id;
+    }
     
     seemsg(qry):any{
       return "the msg is "+qry.id;
+    }
+
+    FloatTest(id):any{
+      return "the customer id is "+id;
     }
     
       create(body): any {
