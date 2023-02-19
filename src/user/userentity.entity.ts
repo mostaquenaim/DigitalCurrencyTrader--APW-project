@@ -7,7 +7,7 @@ export class UserEntity{
     @Column()
     name : string
     @Column()
-    uname : string
+    username : string
     @Column()
     currency : string
     @Column()
