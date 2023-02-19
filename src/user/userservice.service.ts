@@ -19,7 +19,7 @@ export class UserService{
     }
     insertUser(mydto:UserForm):any {
     
-        return "Inserted name: " + mydto.name+" and id is " + mydto.id +" and users currency is Bitcoin";
+        return "Inserted name: " + mydto.name+" and id is " + mydto.id +",users currency is : "+mydto.currency +"and uname is "+mydto.username;
     }
     update(name,id):any {
         return "updated name: " +name+" and id is " +id;
