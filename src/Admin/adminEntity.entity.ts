@@ -9,10 +9,14 @@ export class AdminEntity{
     @Column()
     uname : string
     @Column()
-    currency : string
+    address : string
     @Column()
     password : string
     @Column()
     email : string
+    @Column()
+    birthDate : string
+    @Column()
+    mbl_no : string
 
 }

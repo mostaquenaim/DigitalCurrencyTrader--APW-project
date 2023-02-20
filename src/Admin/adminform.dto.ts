@@ -1,11 +1,6 @@
 import { IsDate, IsInt, IsNotEmpty, Length, Matches } from "class-validator";
 
 export class AdminForm {   
-    @IsNotEmpty({message: "Please enter your id"}) 
-    @IsInt({message: "id must be a number"})
-    //@Length(1,)
-   // @Matches(/^[0-9]+$/,{message: "id must be a number"})
-    id: number;
 
     @IsNotEmpty()
     @Length(4,25,{message: "name must be the size of between 4 and 25",})
@@ -35,8 +30,12 @@ export class AdminForm {
     mbl_no: string;
 
     @IsNotEmpty()
-    @IsDate({
-      message:'date is not correct',
-    })
-    birthDate:Date;
+    birthDate:string;
+
+    @IsNotEmpty()
+    address: string;
+
+    @IsNotEmpty()
+    email: string;
+    
 }
