@@ -37,7 +37,8 @@ import { UserService } from "./userservice.service";
         updateUserbyid( 
             @Body("name") name:string, 
             @Param("id", ParseIntPipe) id:number): any {
-          return this.userService.updatebyid(name,id);
+          console.log(name);
+              //  return this.userService.updatebyid(name,id);
           }
           @Delete("/deleteuser/:id")
           deleteUserbyid( 
@@ -66,10 +67,10 @@ import { UserService } from "./userservice.service";
             postStatus(@Body() id): any {
                 return this.userService.postStatus(id);
         }
-            @Put("/updateuser/:id")
-            updateStatus(@Body() id):any{ 
-            return this.userService.updateStatus(id);
-            }
+            // @Put("/updateuser/:id")
+            // updateStatus(@Body() id):any{ 
+            // return this.userService.updateStatus(id);
+            // }
             // post put patch
             // paeseint parsedouble
             
