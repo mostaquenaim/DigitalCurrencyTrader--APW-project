@@ -25,7 +25,7 @@ export class AdminController
   //add new body
   @Post('/add')
   @UsePipes(new ValidationPipe())
-  create(@Body() mydto:AdminForm) {
+  create(@Body() mydto:AdminForm):any {
     return this.adminService.create(mydto);
   }
   //transformation-1 parseInt

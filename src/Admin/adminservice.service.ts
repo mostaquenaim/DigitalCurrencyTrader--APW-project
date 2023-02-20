@@ -1,9 +1,17 @@
 import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { AdminEntity } from "./adminEntity.entity";
 import { AdminForm } from "./adminform.dto";
 
 
 @Injectable()
 export class AdminService {
+
+  constructor(
+    @InjectRepository(AdminEntity)
+    private adminRepo: Repository<AdminEntity>,
+  ) {}
 
     getExample(){
         return "this is an example"; 
@@ -34,9 +42,17 @@ export class AdminService {
       return "the customer id is "+id;
     }
     
-      create(body): any {
-        return body;
-      }
+    create(mydto:AdminForm):any {
+      const adminaccount = new AdminEntity()
+      adminaccount.name = mydto.name;
+      adminaccount.uname = mydto.uname;
+      adminaccount.mbl_no = mydto.mbl_no;
+      adminaccount.birthDate = mydto.birthDate;
+      adminaccount.email = mydto.email;
+      adminaccount.password = mydto.password;
+      adminaccount.address = mydto.address;
+     return this.adminRepo.save(adminaccount);
+        }
     
       updateUser(name,id):any {
         return " updated name: " +name+" and id is " +id;
