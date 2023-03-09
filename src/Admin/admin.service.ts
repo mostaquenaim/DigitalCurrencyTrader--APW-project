@@ -20,9 +20,9 @@ export class AppService {
   }
 
 
-  findOne(id){
-    return "the id is "+id;
-  }
+  // findOne(id){
+  //   return "the id is "+id;
+  // }
 
   getUserByIDName(qry):any {
     

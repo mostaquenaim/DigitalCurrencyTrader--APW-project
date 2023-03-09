@@ -1,3 +1,4 @@
+import { MailerService } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -11,7 +12,18 @@ export class AdminService {
   constructor(
     @InjectRepository(AdminEntity)
     private adminRepo: Repository<AdminEntity>,
+    private mailerService: MailerService
   ) {}
+
+
+  async sendEmail(mydata){
+    return   await this.mailerService.sendMail({
+           to: mydata.email,
+           subject: mydata.subject,
+           text: mydata.text, 
+         });
+   }
+
 
     getExample(){
         return "this is an example"; 
@@ -21,9 +33,9 @@ export class AdminService {
         return "the customer id is "+id;
       }
     
-      findOne(id){
-        return "the id is "+id;
-      }
+      // findOne(id){
+      //   return "the id is "+id;
+      // }
     
       getUserByIDName(qry):any {
         

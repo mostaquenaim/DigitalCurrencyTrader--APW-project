@@ -16,10 +16,10 @@ export class AdminController
   }
 
   //find an id
-  @Get('/:id')
-  findOne(@Param('id') id) {
-    return this.adminService.findOne(id);
-  }
+  // @Get('/:id')
+  // findOne(@Param('id') id) {
+  //   return this.adminService.findOne(id);
+  // }
 
 
   //add new body
@@ -55,10 +55,15 @@ export class AdminController
     return this.adminService.deleteUserbyid(id);
   }
 
+  @Post('/sendemail')
+sendEmail(@Body() mydata){
+return this.adminService.sendEmail(mydata);
+}
+
 
   //view by customer id
   @Get('/cutomer/id')
-  findcustomer(@Param('id') id) {
+  findcustomer(@Param('id') id): string {
     return this.adminService.findcustomer(id);
   }
 
