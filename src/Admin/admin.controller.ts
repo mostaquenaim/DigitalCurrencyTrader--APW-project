@@ -1,6 +1,10 @@
 import { Body, Controller, Delete, Get, Param, ParseFloatPipe, ParseIntPipe, Post, Put, Query, Req, Request, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AdminForm } from "./adminform.dto";
 import { AdminService } from "./adminservice.service";
+import { UnauthorizedException } from '@nestjs/common/exceptions';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { SessionGuard } from './adminSession.guard';
 
 
 @Controller("/admin")
@@ -9,6 +13,20 @@ export class AdminController
   constructor(private adminService: AdminService){}
 
   
+  //add new admin user
+  @Post('/signup')
+  @UsePipes(new ValidationPipe())
+  create(@Body() mydto:AdminForm):any {
+    return this.adminService.create(mydto);
+  }
+
+  //delete id
+  @Delete('delete/:id')
+  deleteUserbyid(@Param('id') id) {
+    return this.adminService.deleteUserbyid(id);
+  }
+
+
   //index as default
   @Get('/index')
   getExample():any {
@@ -16,18 +34,13 @@ export class AdminController
   }
 
   //find an id
-  // @Get('/:id')
-  // findOne(@Param('id') id) {
-  //   return this.adminService.findOne(id);
-  // }
-
-
-  //add new body
-  @Post('/add')
-  @UsePipes(new ValidationPipe())
-  create(@Body() mydto:AdminForm):any {
-    return this.adminService.create(mydto);
+  @Get('/:id')
+  findOne(@Param('id') id) {
+    return this.adminService.findOne(id);
   }
+
+
+  
   //transformation-1 parseInt
   @Get("/search/:id")
         getUserByID(@Param("id",ParseIntPipe)id:number):any{
@@ -49,13 +62,9 @@ export class AdminController
   return this.adminService.updateUser(name, id);
   }
 
-  //delete id
-  @Delete('delete/:id')
-  deleteUserbyid(@Param('id') id) {
-    return this.adminService.deleteUserbyid(id);
-  }
+  
 
-  @Post('/sendemail')
+  @Post('sendemail')
 sendEmail(@Body() mydata){
 return this.adminService.sendEmail(mydata);
 }

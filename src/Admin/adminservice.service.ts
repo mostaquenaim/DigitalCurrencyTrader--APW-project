@@ -33,9 +33,9 @@ export class AdminService {
         return "the customer id is "+id;
       }
     
-      // findOne(id){
-      //   return "the id is "+id;
-      // }
+      findOne(id){
+        return "the id is "+id;
+      }
     
       getUserByIDName(qry):any {
         

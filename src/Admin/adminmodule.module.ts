@@ -15,14 +15,15 @@ import { AdminService } from "./adminservice.service"
                        secure: true,
                        auth: {
                            user: 'mostaquenaimislam@gmail.com',
-                           pass: 'rpebugiaxvjrvxq'
+                           pass: 'yqpyvbocnbkjyggm'
                        },
                       }
-          }),
+          }
+          
+          ),
         TypeOrmModule.forFeature([AdminEntity])],
 controllers: [AdminController],
 providers: [AdminService],
-
 })
 
 export class AdminModule {}
