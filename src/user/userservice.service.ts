@@ -39,6 +39,7 @@ export class UserService{
     update(name,id):any {
         return "updated name: " +name+" and id is " +id;
     }
+
     // update(name,id):any {
     //     console.log(name+id);
     //     return this.userRepo.update(id,{name:name})
@@ -52,7 +53,8 @@ export class UserService{
     }
     deletebyid(id):any {
     
-        return "Delete id is "+id;
+        // return "Delete id is "+id;
+        return this.userRepo.delete(id)
     }
     addCurrency(id):any{
         return 
@@ -76,6 +78,10 @@ export class UserService{
     updatePassword(password,id):any{
         return
     }
+
+    // async signup(mydto){
+    //     const 
+    // }
 
 
 }
