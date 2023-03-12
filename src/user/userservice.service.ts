@@ -3,6 +3,8 @@ import { UserEntity } from "./userentity.entity";
 import { UserForm } from "./userform.dto";
 import {Repository} from "typeorm"
 import { InjectRepository } from '@nestjs/typeorm';
+import { MailerService } from "@nestjs-modules/mailer";
+
 
 @Injectable()
 export class UserService{
@@ -80,7 +82,7 @@ export class UserService{
     }
 
     // async signup(mydto){
-    //     const 
+    //     const salt =await bcrypt.genSalt()
     // }
 
 
