@@ -2,6 +2,8 @@ import { IsDate, IsInt, IsNotEmpty, Length, Matches } from "class-validator";
 
 export class AdminForm {   
 
+    id:number
+
     @IsNotEmpty()
     @Length(4,25,{message: "name must be the size of between 4 and 25",})
     name: string;
@@ -37,5 +39,8 @@ export class AdminForm {
 
     @IsNotEmpty()
     email: string;
+    
+  filename: string;
+
     
 }
