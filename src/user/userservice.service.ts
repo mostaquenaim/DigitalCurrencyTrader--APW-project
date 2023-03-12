@@ -3,6 +3,8 @@ import { UserEntity } from "./userentity.entity";
 import { UserForm } from "./userform.dto";
 import {Repository} from "typeorm"
 import { InjectRepository } from '@nestjs/typeorm';
+import { MailerService } from "@nestjs-modules/mailer";
+
 
 @Injectable()
 export class UserService{
@@ -39,6 +41,7 @@ export class UserService{
     update(name,id):any {
         return "updated name: " +name+" and id is " +id;
     }
+
     // update(name,id):any {
     //     console.log(name+id);
     //     return this.userRepo.update(id,{name:name})
@@ -52,7 +55,8 @@ export class UserService{
     }
     deletebyid(id):any {
     
-        return "Delete id is "+id;
+        // return "Delete id is "+id;
+        return this.userRepo.delete(id)
     }
     addCurrency(id):any{
         return 
@@ -76,6 +80,10 @@ export class UserService{
     updatePassword(password,id):any{
         return
     }
+
+    // async signup(mydto){
+    //     const salt =await bcrypt.genSalt()
+    // }
 
 
 }

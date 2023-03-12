@@ -3,7 +3,7 @@
 //     id:number;
 // }
 import { MESSAGES } from "@nestjs/core/constants";
-import { IsInt, IsNotEmpty, Length, Matches } from "class-validator";
+import { IsInt, isNotEmpty, IsNotEmpty, Length, Matches } from "class-validator";
 export class UserForm {   
     @IsNotEmpty({message: "Please enter your id and it must be a number"}) 
     @IsInt()
@@ -35,6 +35,7 @@ export class UserForm {
     @IsNotEmpty()
     @Matches(/^[a-zA-Z0-9]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/, { message:'please follow the pattern'})
 
+    @IsNotEmpty()
     email: string;
 
     
