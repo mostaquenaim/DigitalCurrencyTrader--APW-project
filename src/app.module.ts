@@ -13,7 +13,7 @@ import { UserModule } from './user/usermodule.module';
     port: 5432,
     username: 'postgres',
     password: 'root',
-    database: 'MyAdminDB',
+    database: 'Crypto',
     autoLoadEntities: true,
     synchronize: true,
     }

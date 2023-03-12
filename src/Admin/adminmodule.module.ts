@@ -2,7 +2,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminController } from "./admin.controller"
-import { AdminEntity } from "./adminEntity.entity";
+import { AdminEntity } from "./Entity/adminEntity.entity";
 import { AdminService } from "./adminservice.service"
 
 @Module({

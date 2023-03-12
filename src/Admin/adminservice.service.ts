@@ -2,8 +2,9 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, FindManyOptions } from "typeorm";
-import { AdminEntity } from "./adminEntity.entity";
-import { AdminForm } from "./adminform.dto";
+import { AdminEntity } from "./Entity/adminEntity.entity";
+import {UserEntity} from "src/user/userentity.entity";
+import { AdminForm } from "./DTOs/adminform.dto";
 import * as bcrypt from 'bcrypt';
 
 
@@ -13,6 +14,10 @@ export class AdminService {
   constructor(
     @InjectRepository(AdminEntity)
     private adminRepo: Repository<AdminEntity>,
+
+    // @InjectRepository(UserEntity)
+    // private userRepo:Repository<UserEntity>,
+
     private mailerService: MailerService
   ) {}
 
@@ -26,34 +31,7 @@ export class AdminService {
    }
 
 
-    getExample(){
-        return "this is an example"; 
-      }
     
-      findcustomer(id){
-        return "the customer id is "+id;
-      }
-    
-      findOne(id){
-        return "the id is "+id;
-      }
-    
-      getUserByIDName(qry):any {
-        
-        return "the id is "+qry.id +" and name is "+qry.name;
-    }
-
-    getUserByID(id):any{
-      return "the customer id is "+id;
-    }
-    
-    seemsg(qry):any{
-      return "the msg is "+qry.id;
-    }
-
-    FloatTest(id):any{
-      return "the customer id is "+id;
-    }
     
     async findAll() {
       
@@ -83,6 +61,21 @@ export class AdminService {
         return "Please login first.";
       }
     }
+
+    // async viewallcust(session) {
+    //   if (session.email) {
+    //     const mydata = await this.adminRepo.findOneBy({ email: session.email });
+    //     if (mydata) {
+    //       const options: FindManyOptions<UserEntity> = {};
+    //       const customers = await this.userRepo.find(options);
+    //       return customers;
+    //     } else {
+    //       return "Only admins have permission.";
+    //     }
+    //   } else {
+    //     return "Please login first.";
+    //   }
+    // }
 
     async create(mydto:AdminForm) {
       const adminaccount = new AdminEntity()
@@ -173,19 +166,85 @@ export class AdminService {
         }
       }
 
-      async uploadDP(session,file){
+      async uploadDP(session,uFilename:string){
+       // return "dhukse";
+        try{
         if(session.email){
-          const mydto=await this.adminRepo.findOneBy({ email:session.email });
-          mydto.filename=file.filename;
+
+          const mydto = await this.adminRepo.findOneBy({ email: session.email });
+          if(mydto.filename)
+          return "DP already uploaded"
+          mydto.filename=uFilename;
+          const result = await this.adminRepo.save(mydto);
+          if (!result) {
+          return "File not uploaded"
+        }
+        else{
           return "File uploaded"
         }
+      }
         else{
           return "Login first";
         }
       }
+      catch(err){
+        console.error(err);
+        return "something is wrong"
+      }
+      }
+
       
       
-        
+      async updateDP(session,uFilename:string){
+        // return "dhukse";
+         try{
+         if(session.email){
+           const mydto = await this.adminRepo.findOneBy({ email: session.email });
+           mydto.filename=uFilename;
+           const result = await this.adminRepo.save(mydto);
+           if (!result) {
+           return "DP not updated"
+         }
+         else{
+           return "DP updated"
+         }
+       }
+         else{
+           return "Login first";
+         }
+       }
+       catch(err){
+         console.error(err);
+         return "something is wrong"
+       }
+       }
+
+
+      async deleteDP(session){
+        // return "dhukse";
+         try{
+         if(session.email){
+           const mydto = await this.adminRepo.findOneBy({ email: session.email });
+           if(!mydto.filename)
+           return "there is not dp"
+           mydto.filename=null;
+           const result = await this.adminRepo.save(mydto);
+           if (!result) {
+           return "DP not deleted"
+         }
+         else{
+           return "DP deleted"
+         }
+       }
+         else{
+           return "Login first";
+         }
+       }
+       catch(err){
+         console.error(err);
+         return "something is wrong"
+       }
+       }  
 
     
       updateUser(name,id):any {
