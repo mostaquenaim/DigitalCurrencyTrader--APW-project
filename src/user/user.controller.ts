@@ -34,6 +34,7 @@ import { UserService } from "./userservice.service";
         return this.userService.update(name, id);
         }
         @Put("/updateuser/:id")
+        @UsePipes(new ValidationPipe())
         updateUserbyid( 
             @Body("name") name:string, 
             @Param("id", ParseIntPipe) id:number): any {
