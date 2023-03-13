@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, FindManyOptions } from "typeorm";
 import { AdminEntity } from "./Entity/adminEntity.entity";
+import {TermandCoEntity} from "./Entity/termandCoEntity.entity"
 import {UserEntity} from "src/user/userentity.entity";
 import { AdminForm } from "./DTOs/adminform.dto";
 import * as bcrypt from 'bcrypt';
@@ -14,28 +15,25 @@ export class AdminService {
   constructor(
     @InjectRepository(AdminEntity)
     private adminRepo: Repository<AdminEntity>,
+    private mailerService: MailerService,
 
+    @InjectRepository(TermandCoEntity)
+    private tocRepo: Repository<TermandCoEntity>
     // @InjectRepository(UserEntity)
     // private userRepo:Repository<UserEntity>,
 
-    private mailerService: MailerService
+    
   ) {}
 
 
-  async sendEmail(mydata){
+  async sendEmail(mydto){
+
     return   await this.mailerService.sendMail({
-           to: mydata.email,
-           subject: mydata.subject,
-           text: mydata.text, 
+           to: mydto.email,
+           subject: mydto.subject,
+           text: mydto.text, 
          });
    }
-
-
-    
-    
-    async findAll() {
-      
-    }
 
     async viewProfile(session){
       if(session.email)
@@ -100,16 +98,139 @@ export class AdminService {
        return this.adminRepo.save(adminaccount);
         }
 
-      async signin(mydto) {
+    async addDesc(session,mydto){
+
+      if (session.email) {
+        const mydata = await this.adminRepo.findOneBy({ email: session.email });
+
+        if (mydata) {
+           const ifAdded = await this.tocRepo.findOneBy({ adminEntity : mydata });
+
+          if(ifAdded){
+            return "already added"
+          }
+          else{
+            const termandco = new TermandCoEntity()
+
+            termandco.webdescription=mydto.webdescription;
+            termandco.toc=mydto.toc;
+            termandco.contact=mydto.contact;
+            termandco.adminEntity=mydata;
+
+            return this.tocRepo.save(termandco);
+              }
+        } else {
+          return "Only admins have permission.";
+        }
+      } else {
+        return "Please login first.";
+      }
+    }
+
+    async upDesc(session,mydto){
+
+      if (session.email) {
+        const mydata = await this.adminRepo.findOneBy({ email: session.email });
+
+        if (mydata) {
+           const ifAdded = await this.tocRepo.findOneBy({ adminEntity : mydata });
+
+          if(!ifAdded){
+            return "Not added"
+          }
+          else{
+
+            const result = await this.tocRepo.update({ adminEntity: mydata }, mydto);
+
+            try{
+            if(result.affected===0){
+              return "not updated";
+            }
+            else{
+              return "updated";
+            }
+          }
+          catch(err){
+            console.log(err);
+            return "error occured";
+            
+          }
+              }
+        } else {
+          return "Only admins have permission.";
+        }
+      } else {
+        return "Please login first.";
+      }
+      
+    }
+
+    async delDesc(session,mydto){
+
+      if (session.email) {
+        const mydata = await this.adminRepo.findOneBy({ email: session.email });
+
+        if (mydata) {
+           const ifAdded = await this.tocRepo.findOneBy({ adminEntity : mydata });
+
+          if(!ifAdded){
+            return "Not added"
+          }
+          else{
+
+            return this.tocRepo.delete(ifAdded);
+              }
+        } else {
+          return "Only admins have permission.";
+        }
+      } else {
+        return "Please login first.";
+      }
+      
+    }
+
+    async viewDesc(session,mydto){
+
+      if (session.email) {
+        const mydata = await this.adminRepo.findOneBy({ email: session.email });
+
+        if (mydata) {
+           const ifAdded = await this.tocRepo.findOneBy({ adminEntity : mydata });
+
+          if(!ifAdded){
+            return "Not added"
+          }
+          else{
+
+            return ifAdded;
+              }
+        } else {
+          return "Only admins have permission.";
+        }
+      } else {
+        return "Please login first.";
+      }
+      
+    }
+
+      async signin(session,mydto) {
+
+       // console.log(session.email);
+        if(session.email){
+          return 0;
+        }
         const mydata = await this.adminRepo.findOneBy({ email: mydto.email });
         if (!mydata) {
-          return false;
+          return 0;
         }
         //return mydata.password;
         // console.log(mydto.password);
-         console.log(mydata.password);
-        if(mydto.password== mydata.password) return true;
-        return false;
+        // console.log(mydata.password);
+        if(mydto.password== mydata.password) 
+        {
+          return 1;
+        }
+        return 0;
       }
 
       async deleteAdmin(Adminemail) {
@@ -149,7 +270,7 @@ export class AdminService {
         
       }
 
-      async updateAdmin(mydto: AdminForm, email: string): Promise<string> {
+      async updateAdmin(mydto: AdminForm, email: string){
         try {
           const result = await this.adminRepo.update({ email: email }, mydto);
           if (result.affected === 0) {
@@ -193,8 +314,6 @@ export class AdminService {
       }
       }
 
-      
-      
       async updateDP(session,uFilename:string){
         // return "dhukse";
          try{
@@ -218,7 +337,6 @@ export class AdminService {
          return "something is wrong"
        }
        }
-
 
       async deleteDP(session){
         // return "dhukse";
@@ -246,31 +364,6 @@ export class AdminService {
        }
        }  
 
-    
-      updateUser(name,id):any {
-        return " updated name: " +name+" and id is " +id;
-    }
-    
-    sendmeesage(body): any {
-      return body;
-    }
-      
-    updatemsg(msg,id):any {
-        return " updated msg: " +msg+" and id is " +id;
-    }
-    
-    
-    
-    
-    deletemsg(id):any {
-        
-      return "message id "+id+" is requested to be deleted";
-    }
-    
-    allQry(qry){
-      return "all query -> "+qry;
-    }
-    
-    
+
 
 }
