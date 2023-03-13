@@ -101,6 +101,9 @@ logout(@Session() session)
     
   }
 
+  //add t&c
+
+
   //view all customer
   // @Get('viewallcust')
   // viewallcust(@Session() session):any{
@@ -167,7 +170,7 @@ logout(@Session() session)
   
 
   @Post('sendemail')
-sendEmail(@Body() mydata){
+  sendEmail(@Body() mydata){
 return this.adminService.sendEmail(mydata);
 }
 
