@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminController } from "./admin.controller"
 import { AdminEntity } from "./Entity/adminEntity.entity";
 import { AdminService } from "./adminservice.service"
+import { TermandCoEntity } from "./Entity/termandCoEntity.entity";
 
 @Module({
     imports:[
@@ -21,7 +22,7 @@ import { AdminService } from "./adminservice.service"
           }
           
           ),
-        TypeOrmModule.forFeature([AdminEntity])],
+        TypeOrmModule.forFeature([AdminEntity,TermandCoEntity])],
 controllers: [AdminController],
 providers: [AdminService],
 })
