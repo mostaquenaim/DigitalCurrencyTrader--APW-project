@@ -60,16 +60,19 @@ logout(@Session() session)
 }
 
 @Put('/updateadmin')
+@UseGuards(SessionGuard)
   @UsePipes(new ValidationPipe())
   updateAdmin(
     @Session() session,
     @Body() mydto: AdminForm
   ): any {
-    if(session.email)
+    // if(session.email)
     return this.adminService.updateAdmin(mydto, session.email);
-    else
-    return "LOG IN FIRST"
+    // else
+    // return "LOG IN FIRST"
   }
+
+  
 
   //delete id
   @Delete('delete')
@@ -202,11 +205,6 @@ return this.adminService.sendEmail(mydata);
   sendMsgtoCustomer(@Session() Session,@Body() body){
     return this.adminService.sendMsgtoCustomer(Session,body);
   }
-
-  // @Post('sendMsgtoAdvisor')
-  // sendMsgtoAdvisor(@Session() Session,@Body() body){
-  //   return this.adminService.sendMsgtoAdvisor(Session,body);
-  // }
 
   @Delete('deleteCus')
   deleteCus(@Session() Session,
