@@ -23,6 +23,7 @@ export class CustomerService {
         advisoraccount.Email = mydto.Email;
         advisoraccount.Mobile = mydto.Mobile;
         advisoraccount.Password = mydto.Password;
+    
        
        return this.customerRepo.save(advisoraccount);
     }
@@ -36,6 +37,16 @@ getCustomerByID(id):any {
     
     return this.customerRepo.findOneBy({ id });
     
+}
+
+
+getAdvisorByCustomerID(id):any {
+    return this.customerRepo.find({ 
+            where: {id:id},
+        relations: {
+            advisor: true,
+        },
+     });
 }
 
 }

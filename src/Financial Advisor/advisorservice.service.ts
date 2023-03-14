@@ -2,10 +2,12 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AdvisorEntity} from "./advisorentity.entity";
-// import { AdvisorForm } from "./advisorform.dto";
 import * as bcrypt from 'bcrypt';
 import { AdvisorFormUpdate } from "./advisorformupdate.dto";
 import { MailerService } from "@nestjs-modules/mailer/dist";
+import { CryptoForm } from "./cryptoform.dto";
+import { cryptoEntity } from "./cryptoentity.entity";
+import { Blog } from "./blogdto.dto";
 
 
 @Injectable()
@@ -14,7 +16,10 @@ export class AdvisorService {
     constructor(
         @InjectRepository(AdvisorEntity)
         private advisorRepo: Repository<AdvisorEntity>,
-        private mailerService: MailerService
+        private mailerService: MailerService,
+
+        @InjectRepository(cryptoEntity)
+        private cryptoRepo: Repository<cryptoEntity>
       ) {}
 
 
@@ -31,6 +36,11 @@ export class AdvisorService {
    
 //    return this.advisorRepo.save(advisoraccount);
 // }
+
+index(): any { 
+    return this.cryptoRepo.find(); 
+
+}
 
 async signup(mydto) {
     const salt = await bcrypt.genSalt();
@@ -65,6 +75,7 @@ async signup(mydto) {
             
         }
 
+
     async updateProfile(Password,Username){
         const salt = await bcrypt.genSalt();
     const hassedpassed = await bcrypt.hash(Password, salt);
@@ -84,6 +95,31 @@ async sendEmail(mydata){
                text: mydata.text, 
              });
             }
+
+
+            CurrencyInsert(mydto:CryptoForm):any {
     
+    const crypto = new cryptoEntity()
+    
+    crypto.Name = mydto.Name;
+    crypto.Price = mydto.Price;
+    crypto.Market_Cap = mydto.Market_Cap;
+    crypto.Volume = mydto.Volume;
+    crypto.Circulating_Supply = mydto.Circulating_Supply;
+   
+   return this.cryptoRepo.save(crypto);
+}
+
+
+getCustomersByAdminID(id):any {
+    return this.advisorRepo.find({ 
+            where: {id:id},
+        relations: {
+            customers: true,
+        },
+     });
+}
+
+
 
 }

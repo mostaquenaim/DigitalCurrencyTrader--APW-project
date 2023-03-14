@@ -6,6 +6,7 @@ import { AdvisorEntity } from "./advisorentity.entity"
 import { CustomerService } from "src/Customer/customerservice.service";
 import { CustomerEntity } from "src/Customer/customerentity.entity";
 import { MailerModule } from "@nestjs-modules/mailer";
+import { cryptoEntity } from "./cryptoentity.entity";
 
 
 @Module({
@@ -20,7 +21,7 @@ imports: [MailerModule.forRoot({
                    pass: 'pueufuepjkoqzxjo'
                },
               }
-  }),TypeOrmModule.forFeature([AdvisorEntity,CustomerEntity])],
+  }),TypeOrmModule.forFeature([AdvisorEntity,CustomerEntity,cryptoEntity])],
 controllers: [AdvisorController],
 providers: [AdvisorService,CustomerService],
 
