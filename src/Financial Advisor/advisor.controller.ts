@@ -8,7 +8,6 @@
   import { diskStorage } from "multer";
   import { UnauthorizedException } from "@nestjs/common";
   import { SessionGuard } from "./session.guard";
-  import { AdminFormUpdate } from "src/admin/adminformupdate.dto";
   import { AdvisorFormUpdate } from "./advisorformupdate.dto";
 
 
