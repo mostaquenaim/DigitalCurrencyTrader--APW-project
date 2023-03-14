@@ -26,4 +26,5 @@ export class AdminEntity{
     @OneToMany(()=> AdminSendMsg,(adminSendMsg)=>adminSendMsg.admin)
     adminSendMsgs:AdminSendMsg[]
 
+
 }

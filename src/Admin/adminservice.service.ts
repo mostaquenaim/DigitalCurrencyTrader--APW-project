@@ -434,6 +434,66 @@ export class AdminService {
         }
        }
 
+      //  async sendMsgtoAdvisor(session,mydto){
+      //   if (session.email) {
+      //     const mydata = await this.adminRepo.findOneBy({ email: session.email });
+      //     if (mydata) {
+      //       const advissor = await this.AdvisorRepo.findOneBy({ id: mydto.id });
+            
 
+      //       if(!advissor)
+      //         return "advisor not found";
 
+      //       const msg = new AdminSendMsg()
+
+      //       console.log(msg)
+      //       msg.Message=mydto.Message;
+      //       msg.admin=mydata;
+      //       msg.user=customer;
+
+      //       return await this.msgRepo.save(msg);
+      //     } else {
+      //       return "Only admins have permission.";
+      //     }
+      //   } else {
+      //     return "Please login first.";
+      //   }
+      //  }
+      
+
+      //x
+      async deleteCus(session,dEmail:string) {
+
+        if(dEmail){
+        if(session.email){
+          const mydata = await this.adminRepo.findOneBy({ email:session.email });
+          if(mydata){
+            
+              const dltCus=await this.UserRepo.findOneBy({ email:dEmail });
+              if(dltCus){
+                try{
+                 this.UserRepo.delete(dltCus);
+                 return "done";
+                }
+                catch(err){
+                  return "not possible to delete";
+                }
+              }
+              else{
+                return "email not found";
+              }
+          }
+          else{
+            return "Only admins can"
+          }
+        }
+        else{
+          return "Login first";
+        }
+      }
+      else{
+        return "wrong input";
+      }
+        
+      }
 }
