@@ -194,30 +194,30 @@ return this.adminService.sendEmail(mydata);
 
 
     
-    //send message
-    @Post('/sendmsg')
-  sendmeesage(@Body() body) {
-    return this.adminService.sendmeesage(body);
-  }
+  //   //send message
+  //   @Post('/sendmsg')
+  // sendmeesage(@Body() body) {
+  //   return this.adminService.sendmeesage(body);
+  // }
 
-  //delete messag
-  @Delete('msg/delete/:id')
-  deletemsg(@Param('id') id) {
-    return this.adminService.deletemsg(id);
-  }
-
-
-  //update message
-  @Put('updatemsg/:id')
-  updatemsg(@Param('id') id, @Body() body) {
-    return this.adminService.updatemsg(id, body);
-  }
+  // //delete messag
+  // @Delete('msg/delete/:id')
+  // deletemsg(@Param('id') id) {
+  //   return this.adminService.deletemsg(id);
+  // }
 
 
-  //get all query
-  @Get('all')
-  allQry(@Query() qry:any) {
-    return this.adminService.allQry(qry);
-  }
+  // //update message
+  // @Put('updatemsg/:id')
+  // updatemsg(@Param('id') id, @Body() body) {
+  //   return this.adminService.updatemsg(id, body);
+  // }
+
+
+  // //get all query
+  // @Get('all')
+  // allQry(@Query() qry:any) {
+  //   return this.adminService.allQry(qry);
+  // }
   
 }
