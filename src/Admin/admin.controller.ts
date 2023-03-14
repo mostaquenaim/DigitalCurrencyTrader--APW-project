@@ -8,7 +8,6 @@ import { SessionGuard } from './adminSession.guard';
 import { Console } from "console";
 import { get } from "http";
 
-
 @Controller("/admin")
 export class AdminController
 { 
@@ -189,35 +188,24 @@ logout(@Session() session)
 return this.adminService.sendEmail(mydata);
 }
 
-
-
-
-
-    
-  //   //send message
-  //   @Post('/sendmsg')
-  // sendmeesage(@Body() body) {
-  //   return this.adminService.sendmeesage(body);
-  // }
-
-  // //delete messag
-  // @Delete('msg/delete/:id')
-  // deletemsg(@Param('id') id) {
-  //   return this.adminService.deletemsg(id);
-  // }
-
-
-  // //update message
-  // @Put('updatemsg/:id')
-  // updatemsg(@Param('id') id, @Body() body) {
-  //   return this.adminService.updatemsg(id, body);
-  // }
-
-
-  // //get all query
-  // @Get('all')
-  // allQry(@Query() qry:any) {
-  //   return this.adminService.allQry(qry);
-  // }
+  @Get('viewAdvisors')
+  viewAdvisors(@Session() session){
+    return this.adminService.viewAdvisors(session);
+  }
   
+  @Post('viewAdvisorById')
+  viewAdvisorById(@Session() session,@Body() body){
+    return this.adminService.viewAdvisorById(session,body);
+  }
+
+  @Post('sendMsgtoCustomer')
+  sendMsgtoCustomer(@Session() Session,@Body() body){
+    return this.adminService.sendMsgtoCustomer(Session,body);
+  }
+
+  @Delete('deleteCus')
+  deleteCus(@Session() Session,
+  @Body("email") email:string){
+    return this.adminService.deleteCus(Session,email);
+  }
 }

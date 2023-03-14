@@ -1,11 +1,10 @@
+import { MailerModule } from "@nestjs-modules/mailer";
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm/dist";
 import { UserController } from "./user.controller";
 import { UserService } from "./userservice.service";
 import {UserEntity} from "./userentity.entity"
-// { ManagerService } from "src/manager/manager.service";
-// import { ManagerEntity } from "src/manager/manager.entity";
-import { MailerModule } from "@nestjs-modules/mailer";
+import { AdminSendMsg } from "src/Admin/Entity/adminSendMsg.entity";
 
 
 @Module({
@@ -25,7 +24,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
                   }
       }),
         
-        TypeOrmModule.forFeature([UserEntity])],
+        TypeOrmModule.forFeature([UserEntity,AdminSendMsg])],
     controllers: [UserController],
     providers: [UserService],
 })
