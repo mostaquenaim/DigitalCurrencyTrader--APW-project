@@ -198,8 +198,20 @@ return this.adminService.sendEmail(mydata);
     return this.adminService.viewAdvisorById(session,body);
   }
 
-  @Post('sendMsgtoEmployee')
+  @Post('sendMsgtoCustomer')
   sendMsgtoCustomer(@Session() Session,@Body() body){
     return this.adminService.sendMsgtoCustomer(Session,body);
   }
+
+  // @Post('sendMsgtoAdvisor')
+  // sendMsgtoAdvisor(@Session() Session,@Body() body){
+  //   return this.adminService.sendMsgtoAdvisor(Session,body);
+  // }
+
+  @Delete('deleteCus')
+  deleteCus(@Session() Session,
+  @Body("email") email:string){
+    return this.adminService.deleteCus(Session,email);
+  }
+
 }

@@ -11,9 +11,10 @@ export class AdminSendMsg{
     
 
 
-    @ManyToOne(()=> AdminEntity,(admin)=>admin.adminSendMsgs)
-    admins:AdminEntity
+    @ManyToOne(() => UserEntity, (user) => user.adminSendMsgs)
+    user: UserEntity
 
-    @ManyToOne(()=> UserEntity,(user)=>user.adminSendMsgs)
-    users:UserEntity
+    @ManyToOne(()=> AdminEntity,(admin)=>admin.adminSendMsgs)
+    admin:AdminEntity
+
 }
