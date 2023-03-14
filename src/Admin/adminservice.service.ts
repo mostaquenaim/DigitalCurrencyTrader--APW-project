@@ -3,10 +3,12 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, FindManyOptions } from "typeorm";
 import { AdminEntity } from "./Entity/adminEntity.entity";
-import {TermandCoEntity} from "./Entity/termandCoEntity.entity"
+import {TermandCoEntity} from "./Entity/termandCoEntity.entity";
+import {AdvisorEntity} from "src/Financial Advisor/advisorentity.entity";
 import {UserEntity} from "src/user/userentity.entity";
 import { AdminForm } from "./DTOs/adminform.dto";
 import * as bcrypt from 'bcrypt';
+import { AdminSendMsg } from "./Entity/adminSendMsg.entity";
 
 
 @Injectable()
@@ -18,7 +20,16 @@ export class AdminService {
     private mailerService: MailerService,
 
     @InjectRepository(TermandCoEntity)
-    private tocRepo: Repository<TermandCoEntity>
+    private tocRepo: Repository<TermandCoEntity>,
+
+    @InjectRepository(AdvisorEntity)
+    private AdvisorRepo: Repository<AdvisorEntity>,
+
+    @InjectRepository(UserEntity)
+    private UserRepo: Repository<UserEntity>,
+
+    @InjectRepository(AdminSendMsg)
+    private msgRepo: Repository<AdminSendMsg>
     // @InjectRepository(UserEntity)
     // private userRepo:Repository<UserEntity>,
 
@@ -363,6 +374,68 @@ export class AdminService {
          return "something is wrong"
        }
        }  
+
+       async viewAdvisors(session){
+        if (session.email) {
+          const mydata = await this.adminRepo.findOneBy({ email: session.email });
+          if (mydata) {
+            const options: FindManyOptions<AdvisorEntity> = {};
+            const advisors = await this.AdvisorRepo.find(options);
+            return advisors;
+          } else {
+            return "Only admins have permission.";
+          }
+        } else {
+          return "Please login first.";
+        }
+       }
+
+       async viewAdvisorById(session,mydto){
+        if (session.email) {
+          const mydata = await this.adminRepo.findOneBy({ email: session.email });
+          if (mydata) {
+            const advisor = await this.AdvisorRepo.findOneBy({ id: mydto.id });
+            console.log(advisor)
+            if(advisor)
+              return advisor;
+            else
+              return "Not found";
+          } else {
+            return "Only admins have permission.";
+          }
+        } else {
+          return "Please login first.";
+        }
+       }
+
+       async sendMsgtoCustomer(session,mydto){
+        if (session.email) {
+          const mydata = await this.adminRepo.findOneBy({ email: session.email });
+          if (mydata) {
+            const customer = await this.UserRepo.findOneBy({ id: mydto.id });
+            const msg = new AdminSendMsg()
+
+            console.log(msg)
+            // msg.Message=mydto.Message;
+            // msg.admins=mydata;
+            // msg.users=customer;
+            // termandco.adminEntity=mydata;
+
+            if(!customer)
+              return "customer not found"
+
+            return await this.msgRepo.save({
+              Message: mydto.Message,
+              admin: mydata.id,
+              user: mydto.id 
+            });
+          } else {
+            return "Only admins have permission.";
+          }
+        } else {
+          return "Please login first.";
+        }
+       }
 
 
 
