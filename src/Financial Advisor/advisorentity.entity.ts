@@ -30,8 +30,6 @@ export class AdvisorEntity{
   @OneToMany(()=> CustomerEntity,(customer)=>customer.advisor)
   customers:CustomerEntity[]
 
-  
-
  
 }
 

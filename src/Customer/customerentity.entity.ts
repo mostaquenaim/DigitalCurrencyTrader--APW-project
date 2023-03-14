@@ -23,9 +23,8 @@ export class CustomerEntity{
   @Column()
   Password: string;
 
-  @ManyToOne(()=>AdvisorEntity,(advisor)=> advisor.customers)
+  @ManyToOne(()=>AdvisorEntity,(advisor)=> advisor.customers,{onDelete: 'SET NULL'})
 
-@JoinColumn({name:"AdvisorId", referencedColumnName: "id"})
   advisor:AdvisorEntity
 
  
