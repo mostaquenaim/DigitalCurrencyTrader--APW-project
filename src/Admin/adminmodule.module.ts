@@ -4,6 +4,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminController } from "./admin.controller"
 import { AdminEntity } from "./Entity/adminEntity.entity";
 import { AdminService } from "./adminservice.service"
+import { TermandCoEntity } from "./Entity/termandCoEntity.entity";
+import { AdvisorEntity } from "src/Financial Advisor/advisorentity.entity";
+import { CustomerEntity } from 'src/Customer/customerentity.entity';
+import { AdminSendMsg } from "./Entity/adminSendMsg.entity";
+import { UserEntity } from "src/user/userentity.entity";
+
 
 @Module({
     imports:[
@@ -15,13 +21,13 @@ import { AdminService } from "./adminservice.service"
                        secure: true,
                        auth: {
                            user: 'mostaquenaimislam@gmail.com',
-                           pass: 'yqpyvbocnbkjyggm'
+                           pass: 'vwaxokzhcyjpldl' //missing i
                        },
                       }
           }
           
           ),
-        TypeOrmModule.forFeature([AdminEntity])],
+        TypeOrmModule.forFeature([AdminEntity,TermandCoEntity,AdvisorEntity,CustomerEntity,AdminSendMsg,UserEntity])],
 controllers: [AdminController],
 providers: [AdminService],
 })

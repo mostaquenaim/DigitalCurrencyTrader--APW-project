@@ -4,13 +4,15 @@ import { UserForm } from "./userform.dto";
 import {Repository} from "typeorm"
 import { InjectRepository } from '@nestjs/typeorm';
 import { MailerService } from "@nestjs-modules/mailer";
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
 export class UserService{
     constructor(
         @InjectRepository(UserEntity)
-        private userRepo: Repository<UserEntity>  
+        private userRepo: Repository<UserEntity>,
+        private mailerService: MailerService
     ){}
 
     getIndex():string{
@@ -21,14 +23,22 @@ export class UserService{
     // }
     getUserByID(id):any {
     
-        return "id is "+id;
+        // return "id is "+id;
+        return this.userRepo.findOneBy({ id });
+
     }
     getUserByName(qry):any {
     
-        return "the id is "+qry.id +" and name is "+qry.name;
+        // return "the id is "+qry.id +" and name is "+qry.name;
+        return this.userRepo.findOneBy({id:qry.id,name:qry.name})
     }
-    insertUser(mydto:UserForm):any {
+    async insertUser(mydto:UserForm) {
         const useraccount = new UserEntity()
+        const mydata = await this.userRepo.findOneBy({email: mydto.email});
+        if(mydata){
+            return 0;
+        }else
+
         useraccount.name = mydto.name;
         useraccount.username = mydto.username;
         useraccount.currency= mydto.currency;
@@ -39,6 +49,8 @@ export class UserService{
         // return "Inserted name: " + mydto.name+" and id is " + mydto.id +",users currency is : "+mydto.currency +"and uname is "+mydto.username;
     }
     update(name,id):any {
+
+        return this.userRepo.update({name:name},{name:name});
         return "updated name: " +name+" and id is " +id;
     }
 
@@ -84,6 +96,61 @@ export class UserService{
     // async signup(mydto){
     //     const salt =await bcrypt.genSalt()
     // }
+
+    async login(mydto){
+        // console.log(mydto.password);
+    const mydata= await this.userRepo.findOneBy({email: mydto.email});
+    console.log(mydata);
+    if(mydata){
+    const isMatch= await bcrypt.compare(mydto.password, mydata.password);
+    console.log(isMatch);
+    if(isMatch) {
+    return 1;
+    }
+    else {
+        return 0;
+    }
+}
+return 0;
+}
+
+    async signup(mydto) {
+        const salt = await bcrypt.genSalt();
+        const hassedpassed = await bcrypt.hash(mydto.password, salt);
+        mydto.password= hassedpassed;
+        return this.userRepo.save(mydto);
+        }
+
+
+        async sendEmail(mydata){
+            return await this.mailerService.sendMail({
+                   to: mydata.email,
+                   subject: mydata.subject,
+                   text: mydata.text, 
+                 });
+           }
+
+
+           async view(session){
+            if(session.email){
+                const mydata = await this.userRepo.findOneBy({ email: session.email });
+                return mydata;
+            }else
+                return "login required";
+          }
+
+          async deleteaccount(useremail) {
+            const mydata = await this.userRepo.findOneBy({ email:useremail });
+            console.log(mydata);
+            if(mydata)
+            return this.userRepo.delete(mydata);
+            return false;
+          }
+    
+      
+
+
+        
 
 
 }

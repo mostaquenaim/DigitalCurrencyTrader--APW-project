@@ -8,7 +8,6 @@ import { SessionGuard } from './adminSession.guard';
 import { Console } from "console";
 import { get } from "http";
 
-
 @Controller("/admin")
 export class AdminController
 { 
@@ -32,13 +31,15 @@ export class AdminController
   //Login to admin account 
   @Post('/signin')
 async signin(@Session() session, @Body() mydto:AdminForm) {
-  const isMatch = await this.adminService.signin(mydto);
-  if (isMatch) {
+  const isMatch= this.adminService.signin(session,mydto);
+
+  //console.log(isMatch);
+  if (await isMatch==1) {
     session.email = mydto.email;
   //  console.log(session.email);
     return { message: "Welcome" };
   } else {
-    return { message: "Email and password did not match" };
+    return { message: "Something is wrong" };
   }
 }
 
@@ -102,8 +103,26 @@ logout(@Session() session)
   }
 
   //add t&c
+  @Post('addDesc')
+  addDesc(@Session() Session,@Body() body){
+    return this.adminService.addDesc(Session,body);
+  }
 
+  //update
+  @Put('upDesc')
+  upDesc(@Session() Session,@Body() body){
+    return this.adminService.upDesc(Session,body);
+  }
 
+  @Delete('delDesc')
+  delDesc(@Session() Session,@Body() body){
+    return this.adminService.delDesc(Session,body);
+  }
+
+  @Get('viewDesc')
+  viewDesc(@Session() Session,@Body() body){
+    return this.adminService.viewDesc(Session,body);
+  }
   //view all customer
   // @Get('viewallcust')
   // viewallcust(@Session() session):any{
@@ -159,49 +178,34 @@ logout(@Session() session)
     return this.adminService.deleteDP(session)
   }
 
-
   @Get('/admins')
   async getAllAdmins(@Session() session) {
     return this.adminService.getAllAdmins(session);
   }
-
-
-
-  
 
   @Post('sendemail')
   sendEmail(@Body() mydata){
 return this.adminService.sendEmail(mydata);
 }
 
-
-
-
-    
-    //send message
-    @Post('/sendmsg')
-  sendmeesage(@Body() body) {
-    return this.adminService.sendmeesage(body);
-  }
-
-  //delete messag
-  @Delete('msg/delete/:id')
-  deletemsg(@Param('id') id) {
-    return this.adminService.deletemsg(id);
-  }
-
-
-  //update message
-  @Put('updatemsg/:id')
-  updatemsg(@Param('id') id, @Body() body) {
-    return this.adminService.updatemsg(id, body);
-  }
-
-
-  //get all query
-  @Get('all')
-  allQry(@Query() qry:any) {
-    return this.adminService.allQry(qry);
+  @Get('viewAdvisors')
+  viewAdvisors(@Session() session){
+    return this.adminService.viewAdvisors(session);
   }
   
+  @Post('viewAdvisorById')
+  viewAdvisorById(@Session() session,@Body() body){
+    return this.adminService.viewAdvisorById(session,body);
+  }
+
+  @Post('sendMsgtoCustomer')
+  sendMsgtoCustomer(@Session() Session,@Body() body){
+    return this.adminService.sendMsgtoCustomer(Session,body);
+  }
+
+  @Delete('deleteCus')
+  deleteCus(@Session() Session,
+  @Body("email") email:string){
+    return this.adminService.deleteCus(Session,email);
+  }
 }

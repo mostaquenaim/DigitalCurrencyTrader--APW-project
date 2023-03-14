@@ -1,4 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AdminSendMsg } from "./adminSendMsg.entity";
 
 @Entity("admin")
 export class AdminEntity{
@@ -21,5 +22,9 @@ export class AdminEntity{
     mbl_no : string
     @Column({ nullable: true })
     filename:string
+
+    @OneToMany(()=> AdminSendMsg,(adminSendMsg)=>adminSendMsg.admin)
+    adminSendMsgs:AdminSendMsg[]
+
 
 }

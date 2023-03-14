@@ -1,7 +1,17 @@
-import { Body, Controller , Delete, Get,Param, ParseIntPipe, Post, Put, Query, UsePipes, ValidationPipe} from "@nestjs/common";
+import { Body, Controller ,
+     Delete, Get,Param, 
+     ParseIntPipe,UploadedFile, 
+     Post, Put, Query, UsePipes, 
+     ValidationPipe, Session, 
+     UseGuards,ParseFilePipe,UseInterceptors,
+     FileTypeValidator,MaxFileSizeValidator} from "@nestjs/common";
 // import { get } from "http";
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 import { UserForm } from "./userform.dto";
 import { UserService } from "./userservice.service";
+import { SessionGuard } from './usersession.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 
 @Controller("/user")
@@ -74,9 +84,87 @@ import { UserService } from "./userservice.service";
             // }
             // post put patch
             // paeseint parsedouble
-            
-        
 
+            @Get('/login')
+           async login(@Session() session, @Body() mydto:UserForm){
+                const pass = this.userService.login(mydto)
+            // if(this.userService.login(mydto)){
+                if(await pass===1){
+                session.email = mydto.email;
+                // console.log(session.email);
+            return {message:"success"};
+            }else{
+                return {message:"invalid credentials"};
+            }
+            
+            }
+
+            // @Post('/signup')
+            // @UsePipes(new ValidationPipe())
+            // async create(@Body() mydto:UserForm) {
+            //   const result = this.userService.insertUser(mydto);
+            //   if(await result === 0) {
+            //     return "an account has assigned to this email";
+            //   } else {
+            //    // console.log(result);
+            //     return "account created";
+            //   }
+            // }
+
+            @Post('/signup')
+            @UseInterceptors(FileInterceptor('myfile',
+            {storage:diskStorage({
+            destination: './uploads',
+            filename: function (req, file, cb) {
+                cb(null,Date.now()+file.originalname)
+            }
+            })
+
+            }))
+             signup(@Body() mydto:UserForm,@UploadedFile(  new ParseFilePipe({
+             validators: [
+                 new MaxFileSizeValidator({ maxSize: 2000000 }),
+                 new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+             ],
+             }),) file: Express.Multer.File){
+
+            mydto.file = file.filename;  
+
+            return this.userService.signup(mydto);
+            console.log(file)
+            }
+
+            @Get('/logout')
+            logout(@Session() session){
+            if(session.email){
+                session.destroy()
+                return {message:"logged out successfully"};
+            }else{
+                throw new UnauthorizedException("Can't log out");
+            }
+        }
+
+        @Post('/sendmail')
+        sendEmail(@Body() mydata){
+        return this.userService.sendEmail(mydata);
+}
+
+        @Get('/profile')
+        view(@Session() session):any {
+        return this.userService.view(session);
+    }
+
+    @Delete('delete')
+    deleteaccount(@Session() session) {
+      
+      if(session.email){
+        if(this.userService.deleteaccount(session.email)){
+            session.destroy();
+            return "account deleted ";
+      }
+    }
+      return "need to login first";
+}
 
 
 }

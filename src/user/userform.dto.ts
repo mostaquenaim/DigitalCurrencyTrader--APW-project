@@ -37,6 +37,9 @@ export class UserForm {
 
     @IsNotEmpty()
     email: string;
+    
+    file: string;
+
 
     
 }
