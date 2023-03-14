@@ -16,6 +16,8 @@ export class UserEntity{
     password : string
     @Column()
     email : string
+    @Column({ nullable: true })
+    file: string
 
     @OneToMany(()=> AdminSendMsg,(adminSendMsg)=>adminSendMsg.user)
     adminSendMsgs:AdminSendMsg[]
