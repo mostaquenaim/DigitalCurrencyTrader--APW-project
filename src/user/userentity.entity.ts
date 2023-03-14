@@ -17,6 +17,6 @@ export class UserEntity{
     @Column()
     email : string
 
-    @OneToMany(()=> AdminSendMsg,(adminSendMsg)=>adminSendMsg.users)
+    @OneToMany(()=> AdminSendMsg,(adminSendMsg)=>adminSendMsg.user)
     adminSendMsgs:AdminSendMsg[]
 }

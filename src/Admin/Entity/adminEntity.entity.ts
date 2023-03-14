@@ -23,7 +23,7 @@ export class AdminEntity{
     @Column({ nullable: true })
     filename:string
 
-    @OneToMany(()=> AdminSendMsg,(adminSendMsg)=>adminSendMsg.admins)
+    @OneToMany(()=> AdminSendMsg,(adminSendMsg)=>adminSendMsg.admin)
     adminSendMsgs:AdminSendMsg[]
 
 }

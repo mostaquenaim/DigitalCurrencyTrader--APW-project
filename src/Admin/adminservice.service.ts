@@ -413,22 +413,19 @@ export class AdminService {
           const mydata = await this.adminRepo.findOneBy({ email: session.email });
           if (mydata) {
             const customer = await this.UserRepo.findOneBy({ id: mydto.id });
+            
+
+            if(!customer)
+              return "customer not found";
+
             const msg = new AdminSendMsg()
 
             console.log(msg)
-            // msg.Message=mydto.Message;
-            // msg.admins=mydata;
-            // msg.users=customer;
-            // termandco.adminEntity=mydata;
+            msg.Message=mydto.Message;
+            msg.admin=mydata;
+            msg.user=customer;
 
-            if(!customer)
-              return "customer not found"
-
-            return await this.msgRepo.save({
-              Message: mydto.Message,
-              admin: mydata.id,
-              user: mydto.id 
-            });
+            return await this.msgRepo.save(msg);
           } else {
             return "Only admins have permission.";
           }
