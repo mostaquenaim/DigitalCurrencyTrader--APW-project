@@ -97,7 +97,7 @@ getAdminByMobile(@Param('name') name: string): any {
   @Post('/signin')
 async signin(@Session() session, @Body() mydto:AdminForm)
   {
-  // console.log("enter")
+   console.log("enter")
 
     const res = await (this.adminService.signin(mydto));
 if(res==true)
@@ -180,7 +180,7 @@ logout(@Session() session)
   @Get('profile')
   viewProfile(@Query('email') email: string) {
     console.log(email);
-    
+
     return this.adminService.viewProfile(email);
   }
 

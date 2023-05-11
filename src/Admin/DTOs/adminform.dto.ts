@@ -32,7 +32,7 @@ export class AdminForm {
     mbl_no: string;
 
     @IsNotEmpty()
-    birthDate:string;
+    birthDate:Date;
 
     @IsNotEmpty()
     address: string;

@@ -17,7 +17,7 @@ export class AdminEntity{
     @Index({ unique: true })
     email: string;
     @Column()
-    birthDate : string
+    birthDate : Date
     @Column()
     mbl_no : string
     @Column({ nullable: true })
