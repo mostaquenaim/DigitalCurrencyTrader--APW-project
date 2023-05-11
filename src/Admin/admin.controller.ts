@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, ParseFloatPipe, ParseIntPipe, Patch, Post, Put, Query, Req, Request, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, ParseFloatPipe, ParseIntPipe, Patch, Post, Put, Query, Req, Request, Res, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AdminForm } from "./DTOs/adminform.dto";
 import { AdminService } from "./adminservice.service";
 import { UnauthorizedException } from '@nestjs/common/exceptions';
@@ -8,53 +8,127 @@ import { SessionGuard } from './adminSession.guard';
 import { Console } from "console";
 import { get } from "http";
 
-@Controller("/admin")
+@Controller('/admin')
 export class AdminController
 { 
   constructor(private adminService: AdminService){}
 
   
+
+  @Get('/index')
+  getAdmin(): any {
+    return this.adminService.getIndex();
+  }
+
+
+  @Get('/getadvisors')
+  getAdvisor(): any {
+    return this.adminService.getAdvisor();
+  }
+
+  
+  @Get('/getusers')
+  getUser(): any {
+    return this.adminService.getUser();
+  }
+
+  @Get('/getadvisorimage/:name')
+    getadvisorImages(@Param('name') name, @Res() res) {
+      res.sendFile(name,{ root: './uploads' })
+    }
+  
+    @Get('/getcustomerimage/:name')
+    getcustomerimage(@Param('name') name, @Res() res) {
+      res.sendFile(name,{ root: './uploads' })
+    }
+
+  @Get('/findadmin/:id')
+  getAdminByID(@Param('id', ParseIntPipe) id: number): any {
+    return this.adminService.getAdminByID(id);
+  }
+
+  @Get('/findadminbyuname/:name')
+getAdminByName(@Param('name') name: string): any {
+  return this.adminService.getAdminByName(name);
+}
+
+
+
+@Get('/findadminbymobile/:name')
+getAdminByMobile(@Param('name') name: string): any {
+  return this.adminService.getAdminByMobile(name);
+}
+  
+
+  @Get('/findcustomer/:id')
+  getCustomerByID(@Param('id', ParseIntPipe) id: number): any {
+    return this.adminService.getCustomerByID(id);
+  }
+
+  @Get('/findadvisor/:id')
+  getAdvisorByID(@Param('id', ParseIntPipe) id: number): any {
+    return this.adminService.getAdvisorByID(id);
+  }
+
   //add new admin user
   @Post('/signup')
-  @UsePipes(new ValidationPipe())
-  async create(@Body() mydto:AdminForm) {
-    const result = this.adminService.create(mydto);
-    if(await result === 0) {
-      return "email already signed up";
-    } else {
-     // console.log(result);
-      return "account created";
+  @UseInterceptors(FileInterceptor('filename',
+  {storage:diskStorage({
+    destination: './uploads',
+    filename: function (req, file, cb) {
+      cb(null,Date.now()+file.originalname)
     }
+  })
+  }))
+  create(@Body() mydto:AdminForm,@UploadedFile(  new ParseFilePipe({
+    validators: [
+      new MaxFileSizeValidator({ maxSize: 160000 }),
+      new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+    ],
+  }),) file: Express.Multer.File){
+  
+  mydto.filename = file.filename;  
+  console.log(mydto)
+  return this.adminService.create(mydto);
   }
   
 
   //Login to admin account 
   @Post('/signin')
-async signin(@Session() session, @Body() mydto:AdminForm) {
-  const isMatch= this.adminService.signin(session,mydto);
+async signin(@Session() session, @Body() mydto:AdminForm)
+  {
+  // console.log("enter")
 
-  //console.log(isMatch);
-  if (await isMatch==1) {
-    session.email = mydto.email;
-  //  console.log(session.email);
-    return { message: "Welcome" };
-  } else {
-    return { message: "Something is wrong" };
-  }
+    const res = await (this.adminService.signin(mydto));
+if(res==true)
+{
+  // console.log("pass milse")
+  session.email = mydto.email;
+  return (session.email);
 }
+else
+{
+  throw new UnauthorizedException({ message: "invalid credentials" });
+}
+}
+
+
 
 //logout
 @Get('/logout')
 logout(@Session() session)
 {
+
   
-  if(session.email)
+  if(session)
   {
+    
     session.destroy()
     return {message:"you are logged out successfully"};
   }
   else
   {
+
     throw new UnauthorizedException("Can't log out");
   }
 }
@@ -67,12 +141,16 @@ logout(@Session() session)
     @Body() mydto: AdminForm
   ): any {
     // if(session.email)
+    console.log(session.email)
     return this.adminService.updateAdmin(mydto, session.email);
     // else
     // return "LOG IN FIRST"
   }
 
-  
+  @Get('/getimage/:name')
+    getImages(@Param('name') name, @Res() res) {
+      res.sendFile(name,{ root: './uploads' })
+    }
 
   //delete id
   @Delete('delete')
@@ -99,11 +177,16 @@ logout(@Session() session)
   }
 
   //index as default
-  @Get('/profile')
-  viewProfile(@Session() session):any {
-    return this.adminService.viewProfile(session);
+  @Get('profile')
+  viewProfile(@Query('email') email: string) {
+    console.log(email);
     
+    return this.adminService.viewProfile(email);
   }
+
+
+  // @Get('findbyemail')
+  // findByEmail(@Body("email") email:string)
 
   //add t&c
   @Post('addDesc')

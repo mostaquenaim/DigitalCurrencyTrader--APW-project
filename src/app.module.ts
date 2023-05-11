@@ -6,20 +6,28 @@ import { AppService } from './app.service';
 import { CustomerModule } from './Customer/customermodule.module';
 import { AdvisorModule } from './Financial Advisor/advisormodule.module';
 import { UserModule } from './user/usermodule.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
 
 @Module({
   imports: [UserModule,AdminModule,AdvisorModule, CustomerModule, TypeOrmModule.forRoot(
     {
     type: 'postgres',
-    host: 'localhost',
-    port: 5432,
+    host: 'containers-us-west-151.railway.app',
+    port: 5703,
     username: 'postgres',
-    password: '12345',
-    database: 'Crypto',
+    password: 'ItPwBWVUUWyyaag1EWSA',
+    database: 'railway',
     autoLoadEntities: true,
     synchronize: true,
     }
-  ),],
+  ),
+  ServeStaticModule.forRoot({
+    rootPath: join(__dirname, '..', '../public'), // added ../ to get one folder back
+    serveRoot: '/public/' //last slash was important
+  }),
+],
   controllers: [AppController],
   providers: [AppService],
 })

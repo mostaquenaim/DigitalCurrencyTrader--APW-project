@@ -1,5 +1,5 @@
 import { MailerService } from "@nestjs-modules/mailer";
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, FindManyOptions } from "typeorm";
 import { AdminEntity } from "./Entity/adminEntity.entity";
@@ -36,6 +36,86 @@ export class AdminService {
     
   ) {}
 
+  getIndex():any { 
+    return this.adminRepo.find();
+
+}
+
+getAdvisor():any { 
+  return this.AdvisorRepo.find();
+
+}
+
+getUser():any { 
+  return this.UserRepo.find();
+
+}
+
+async getAdminByID(id) {
+  const data=await this.adminRepo.findOneBy({ id });
+  console.log(data);
+  if(data!==null) {
+      return data;
+  }
+ else 
+ {
+  throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+ }
+
+}
+
+async getCustomerByID(id) {
+  const data=await this.UserRepo.findOneBy({ id });
+  console.log(data);
+  if(data!==null) {
+      return data;
+  }
+ else 
+ {
+  throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+ }
+
+}
+
+async getAdminByName(name:string) {
+  const data=await this.adminRepo.findOneBy({ uname: name }); 
+  console.log(data);
+  if(data!==null) {
+      return data;
+  }
+ else 
+ {
+  throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+ }
+
+}
+
+async getAdminByMobile(name:string) {
+  const data=await this.adminRepo.findOneBy({ mbl_no: name }); 
+  console.log(data);
+  if(data!==null) {
+      return data;
+  }
+ else 
+ {
+  throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+ }
+
+}
+
+async getAdvisorByID(id) {
+  const data=await this.AdvisorRepo.findOneBy({ id });
+  console.log(data);
+  if(data!==null) {
+      return data;
+  }
+ else 
+ {
+  throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+ }
+
+}
+
 
   async sendEmail(mydto){
 
@@ -46,11 +126,14 @@ export class AdminService {
          });
    }
 
-    async viewProfile(session){
-      if(session.email)
+    async viewProfile(email){
+      console.log(email)
+      if(email)
       {
-      const mydata = await this.adminRepo.findOneBy({ email: session.email });
+      const mydata = await this.adminRepo.findOneBy({ email: email });
+      console.log(mydata)
       return mydata;
+
       }
       else
       return "login first";
@@ -86,7 +169,8 @@ export class AdminService {
     //   }
     // }
 
-    async create(mydto:AdminForm) {
+
+    async create(mydto) {
       const adminaccount = new AdminEntity()
 
       const mydata = await this.adminRepo.findOneBy({ email: mydto.email });
@@ -103,6 +187,7 @@ export class AdminService {
       adminaccount.email = mydto.email;
       adminaccount.password = mydto.password;
       adminaccount.address = mydto.address;
+      adminaccount.filename=mydto.filename;
 
       
       
@@ -224,24 +309,21 @@ export class AdminService {
       
     }
 
-      async signin(session,mydto) {
+      async signin(mydto) {
 
        // console.log(session.email);
-        if(session.email){
-          return 0;
-        }
+        // if(session.email){
+        //   return 0;
+        // }
         const mydata = await this.adminRepo.findOneBy({ email: mydto.email });
         if (!mydata) {
           return 0;
         }
-        //return mydata.password;
-        // console.log(mydto.password);
-        // console.log(mydata.password);
         if(mydto.password== mydata.password) 
         {
-          return 1;
+          return true;
         }
-        return 0;
+        return false;
       }
 
       async deleteAdmin(Adminemail) {
@@ -496,4 +578,6 @@ export class AdminService {
       }
         
       }
+
+      
 }

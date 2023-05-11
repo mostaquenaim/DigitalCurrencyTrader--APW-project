@@ -22,9 +22,8 @@ export class CustomerEntity{
 
   @Column()
   Password: string;
-
-  @ManyToOne(()=>AdvisorEntity,(advisor)=> advisor.customers,{onDelete: 'SET NULL'})
-
+  
+  @ManyToOne(()=> AdvisorEntity,(advisor)=>advisor.customers)
   advisor:AdvisorEntity
 
  

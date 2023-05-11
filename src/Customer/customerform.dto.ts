@@ -35,7 +35,5 @@ export  class CustomerForm {
     // @Matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,{message:"Please enter a strong password with minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special characte"})
     Password: string;
 
-    @IsNotEmpty() 
-    AdvisorId: number;
 
 }
