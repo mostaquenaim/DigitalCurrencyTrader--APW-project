@@ -137,12 +137,12 @@ logout(@Session() session)
 @UseGuards(SessionGuard)
   @UsePipes(new ValidationPipe())
   updateAdmin(
-    @Session() session,
+    @Body("email") email:string,
     @Body() mydto: AdminForm
   ): any {
     // if(session.email)
-    console.log(session.email)
-    return this.adminService.updateAdmin(mydto, session.email);
+    
+    return this.adminService.updateAdmin(mydto, email);
     // else
     // return "LOG IN FIRST"
   }
