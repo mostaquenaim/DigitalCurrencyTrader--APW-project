@@ -7,6 +7,8 @@ import { diskStorage } from 'multer';
 import { SessionGuard } from './adminSession.guard';
 import { Console } from "console";
 import { get } from "http";
+import { AdminUpdateForm } from "./DTOs/adminupdateform.dto";
+import session from "express-session";
 
 @Controller('/admin')
 export class AdminController
@@ -87,6 +89,7 @@ getAdminByMobile(@Param('name') name: string): any {
     ],
   }),) file: Express.Multer.File){
   
+
   mydto.filename = file.filename;  
   console.log(mydto)
   return this.adminService.create(mydto);
@@ -134,16 +137,15 @@ logout(@Session() session)
 }
 
 @Put('/updateadmin')
-@UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
   updateAdmin(
-    @Session() session,
-    @Body() mydto: AdminForm
+    @Body() mydto: AdminForm,
   ): any {
     // if(session.email)
     
-    console.log(session.email)
-    return this.adminService.updateAdmin(mydto, session.email);
+    //  console.log(session.email)
+    console.log(mydto)
+
+    return this.adminService.updateAdmin(mydto, mydto.email);
     // else
     // return "LOG IN FIRST"
   }
