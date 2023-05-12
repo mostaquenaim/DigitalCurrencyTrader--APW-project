@@ -364,21 +364,41 @@ async getAdvisorByID(id) {
       }
 
       async updateAdmin(mydto: AdminForm, email: string){
+
+        const mydata = await this.adminRepo.findOneBy({ email: email });
         
-        try {
-          const result = await this.adminRepo.update({ email: email }, mydto);
-          if (result.affected === 0) {
-            // No rows were affected by the update
-            return 'Admin not found';
-          } else {
-            // Update was successful
-            return 'Admin updated';
-          }
-        } catch (err) {
-          // An error occurred during the update operation
-          console.error(err);
-          return 'Update failed';
+        if(!mydata) 
+        {
+          return 0;
         }
+  
+        mydata.name = mydto.name;
+        mydata.uname = mydto.uname;
+        mydata.mbl_no = mydto.mbl_no;
+        // mydata.birthDate = mydto.birthDate;
+        mydata.email = mydto.email;
+        mydata.password = mydto.password;
+        mydata.address = mydto.address;
+        // mydata.filename=mydto.filename;
+  
+        
+        
+         return this.adminRepo.save(mydata);
+
+        // try {
+        //   const result = await this.adminRepo.update({ email: email }, mydto);
+        //   if (result.affected === 0) {
+        //     // No rows were affected by the update
+        //     return 'Admin not found';
+        //   } else {
+        //     // Update was successful
+        //     return 'Admin updated';
+        //   }
+        // } catch (err) {
+        //   // An error occurred during the update operation
+        //   console.error(err);
+        //   return 'Update failed';
+        // }
       }
 
       async uploadDP(session,uFilename:string){
