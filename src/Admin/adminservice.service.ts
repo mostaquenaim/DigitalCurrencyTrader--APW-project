@@ -366,8 +366,7 @@ async getAdvisorByID(id) {
 
       async updateAdmin(mydto: AdminForm, email: string){
 
-       
-
+        console.log(mydto.email)
         try {
           const result = await this.adminRepo.update({ email: email }, mydto);
           if (result.affected === 0) {

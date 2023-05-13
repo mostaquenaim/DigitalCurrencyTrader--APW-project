@@ -137,9 +137,22 @@ logout(@Session() session)
 }
 
 @Put('/updateadmin')
+@UseInterceptors(FileInterceptor('filename',
+  {storage:diskStorage({
+    destination: './uploads',
+    filename: function (req, file, cb) {
+      cb(null,Date.now()+file.originalname)
+    }
+  })
+  }))
+  
   updateAdmin(
-    @Body() mydto: AdminForm,
-  ): any {
+    @Body() mydto: AdminForm,@UploadedFile(  new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 160000 }),
+        new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+      ],
+    }),) file: Express.Multer.File){
     // if(session.email)
     
     //  console.log(session.email)
@@ -150,6 +163,7 @@ logout(@Session() session)
     // return "LOG IN FIRST"
   }
 
+  
   @Get('/getimage/:name')
     getImages(@Param('name') name, @Res() res) {
       res.sendFile(name,{ root: './uploads' })
