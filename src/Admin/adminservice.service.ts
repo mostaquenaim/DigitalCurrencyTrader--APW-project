@@ -548,40 +548,45 @@ async getAdvisorByID(id) {
       
 
       //x
-      async deleteCus(session,dEmail:string) {
+      async deleteCus(dEmail:string) {
 
-        if(dEmail){
-        if(session.email){
-          const mydata = await this.adminRepo.findOneBy({ email:session.email });
-          if(mydata){
+        
             
               const dltCus=await this.UserRepo.findOneBy({ email:dEmail });
               if(dltCus){
                 try{
                  this.UserRepo.delete(dltCus);
-                 return "done";
+                 return true;
                 }
                 catch(err){
-                  return "not possible to delete";
+                  return false;
                 }
               }
-              else{
-                return "email not found";
-              }
-          }
-          else{
-            return "Only admins can"
-          }
-        }
-        else{
-          return "Login first";
-        }
-      }
-      else{
-        return "wrong input";
-      }
+             
+          
+         
         
       }
+
+      async deleteAdv(dEmail:string) {
+
+        
+            
+        const dltCus=await this.AdvisorRepo.findOneBy({ Email:dEmail });
+        if(dltCus){
+          try{
+           this.AdvisorRepo.delete(dltCus);
+           return true;
+          }
+          catch(err){
+            return false;
+          }
+        }
+       
+    
+   
+  
+}
 
       
 }

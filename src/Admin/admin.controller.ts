@@ -311,8 +311,15 @@ return this.adminService.sendEmail(mydata);
   }
 
   @Delete('deleteCus')
-  deleteCus(@Session() Session,
-  @Body("email") email:string){
-    return this.adminService.deleteCus(Session,email);
+  deleteCus(
+  @Query("email") email:string){
+    return this.adminService.deleteCus(email);
   }
+
+  @Delete('deleteAdv')
+  deleteAdv(
+  @Query("email") email:string){
+    return this.adminService.deleteAdv(email);
+  }
+
 }

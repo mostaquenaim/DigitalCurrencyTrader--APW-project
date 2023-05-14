@@ -26,7 +26,7 @@ export class AdvisorController
     }
 
     @Post('/signup')
-    @UseInterceptors(FileInterceptor('myfile',
+    @UseInterceptors(FileInterceptor('filename',
     {storage:diskStorage({
       destination: './uploads',
       filename: function (req, file, cb) {

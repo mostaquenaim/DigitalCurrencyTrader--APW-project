@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AdvisorEntity} from "./advisorentity.entity";
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { AdvisorFormUpdate } from "./advisorformupdate.dto";
 import { MailerService } from "@nestjs-modules/mailer/dist";
 import { CryptoForm } from "./cryptoform.dto";
@@ -43,9 +43,9 @@ index(): any {
 }
 
 async signup(mydto) {
-    const salt = await bcrypt.genSalt();
-    const hassedpassed = await bcrypt.hash(mydto.Password, salt);
-    mydto.Password= hassedpassed;
+    // const salt = await bcrypt.genSalt();
+    // const hassedpassed = await bcrypt.hash(mydto.Password, salt);
+    // mydto.Password= hassedpassed;
     return this.advisorRepo.save(mydto);
     }
 
