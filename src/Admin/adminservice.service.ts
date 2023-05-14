@@ -335,29 +335,30 @@ async getAdvisorByID(id) {
         return false;
       }
 
-      async deleteAdminById(session,dEmail:string) {
+      async deleteAdminById(dEmail:string) {
+
 
         if(dEmail){
-        if(session.email){
-          const mydata = await this.adminRepo.findOneBy({ email:session.email });
-          if(mydata){
+        // if(session.email){
+          // const mydata = await this.adminRepo.findOneBy({ email:session.email });
+          // if(mydata){
             
               const dltAdmin=await this.adminRepo.findOneBy({ email:dEmail });
               if(dltAdmin){
                 return this.adminRepo.delete(dltAdmin);
               }
               else{
-                return "email not found";
+                return false;
               }
-          }
-          else{
-            return "Only admins can"
-          }
+          // }
+          // else{
+          //   return "Only admins can"
+          // }
         }
-        else{
-          return "Login first";
-        }
-      }
+        // else{
+        //   return "Login first";
+        // }
+      // }
       else{
         return "wrong input";
       }

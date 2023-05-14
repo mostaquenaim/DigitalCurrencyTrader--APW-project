@@ -49,6 +49,11 @@ export class AdminController
     return this.adminService.getAdminByID(id);
   }
 
+  @Get('/findcustomer/:id')
+  getCustomerByID(@Param('id', ParseIntPipe) id: number): any {
+    return this.adminService.getCustomerByID(id);
+  }
+
   @Get('/findadminbyuname/:name')
 getAdminByName(@Param('name') name: string): any {
   return this.adminService.getAdminByName(name);
@@ -62,10 +67,7 @@ getAdminByMobile(@Param('name') name: string): any {
 }
   
 
-  @Get('/findcustomer/:id')
-  getCustomerByID(@Param('id', ParseIntPipe) id: number): any {
-    return this.adminService.getCustomerByID(id);
-  }
+  
 
   @Get('/findadvisor/:id')
   getAdvisorByID(@Param('id', ParseIntPipe) id: number): any {
@@ -184,14 +186,16 @@ logout(@Session() session)
     return "Must login first";
   }
 
-  @Delete('deleteAdminById')
-  @UsePipes(new ValidationPipe())
+  @Delete('deleteAdminByEmail')
+  // @UsePipes(new ValidationPipe())
    deleteAdminById(
-    @Session() session,
-    @Body("email") email:string, 
+    @Query("email") email:string, 
   ) {
-    return this.adminService.deleteAdminById(session,email);
+    console.log(email)
+    return this.adminService.deleteAdminById(email);
   }
+
+
 
   //index as default
   @Get('profile')
