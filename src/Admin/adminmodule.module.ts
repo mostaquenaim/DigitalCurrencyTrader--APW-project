@@ -21,7 +21,7 @@ import { UserEntity } from "src/user/userentity.entity";
                        secure: true,
                        auth: {
                            user: 'mostaquenaimislam@gmail.com',
-                           pass: 'vwaxokzhcyjpldl' //missing i
+                           pass: '' //missing i
                        },
                       }
           }
